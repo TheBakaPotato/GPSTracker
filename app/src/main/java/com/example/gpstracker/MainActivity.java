@@ -7,11 +7,16 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int DEFAUL_INTERVAL = 30;
+    public static final int FASTEST_INTERVAL = 5;
     TextView tv_lat, tv_lon, tv_altitude, tv_accuracy, tv_speed, tv_sensor, tv_updates, tv_address;
     Switch sw_locationsupdates, sw_gps;
     FusedLocationProviderClient fusedLocationProviderClient;
+    boolean updateOn=false;
+    LocationRequest locationReqest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,5 +31,11 @@ public class MainActivity extends AppCompatActivity {
         tv_address = findViewById(R.id.tv_address);
         sw_locationsupdates = findViewById(R.id.sw_locationsupdates);
         sw_gps = findViewById(R.id.sw_gps);
+
+        locationReqest = new LocationRequest();
+
+        locationReqest.setInterval(1000 * DEFAUL_INTERVAL);
+        locationReqest.setFastestInterval(1000 * FASTEST_INTERVAL);
+        locationReqest.setInterval(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
     }
 }

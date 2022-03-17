@@ -15,7 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -26,8 +28,10 @@ public class MainActivity extends AppCompatActivity {
     TextView tv_lat, tv_lon, tv_altitude, tv_accuracy, tv_speed, tv_sensor, tv_updates, tv_address;
     Switch sw_locationsupdates, sw_gps;
     FusedLocationProviderClient fusedLocationProviderClient;
-    boolean updateOn=false;
+    boolean updateOn = false;
     LocationRequest locationReqest;
+    LocationCallback locationCallBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,21 +53,67 @@ public class MainActivity extends AppCompatActivity {
         locationReqest.setFastestInterval(1000 * FASTEST_INTERVAL);
         locationReqest.setInterval(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
-        sw_gps.setOnClickListener(new View.OnClickListener(){
+        locationCallBack = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                Location location = locationResult.getLastLocation();
+                updateUIValues(location);
+            }
+        };
+
+        sw_gps.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if (sw_gps.isChecked()){
+                if (sw_gps.isChecked()) {
                     locationReqest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                     tv_sensor.setText("Using GPS sensors");
-                }else {
+                } else {
                     locationReqest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
                     tv_sensor.setText("Using tower signal + wifi");
 
                 }
             }
         });
+        sw_locationsupdates.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sw_locationsupdates.isChecked()) {
+                    startLocationUpdates();
+                } else {
+                    stopLocationUpdates();
+                }
+            }
+        });
         updateGPS();
+    }
+
+    private void startLocationUpdates() {
+        tv_updates.setText("Location is being tracked.");
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        fusedLocationProviderClient.requestLocationUpdates(locationReqest, locationCallBack, null);
+        updateGPS();
+    }
+
+    private void stopLocationUpdates() {
+        tv_updates.setText("Location isn't being tracked");
+        tv_speed.setText("Location isn't being tracked");
+        tv_altitude.setText("Location isn't being tracked");
+        tv_accuracy.setText("Location isn't being tracked");
+        tv_lon.setText("Location isn't being tracked");
+        tv_lat.setText("Location isn't being tracked");
+        tv_sensor.setText("Location isn't being tracked");
+        fusedLocationProviderClient.removeLocationUpdates(locationCallBack);
     }
 
     @Override

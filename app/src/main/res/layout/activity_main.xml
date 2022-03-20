@@ -175,5 +175,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_address" />
 
+    <TextView
+        android:id="@+id/tv_labelCrumbCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="WayPoints"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_labelsensor" />
+
+    <TextView
+        android:id="@+id/tv_countofCrumbs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        app:layout_constraintStart_toEndOf="@+id/tv_labelCrumbCounter"
+        app:layout_constraintTop_toTopOf="@+id/tv_labelCrumbCounter" />
+
+    <Button
+        android:id="@+id/btn_newWayPoint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="New Waypoint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_labelCrumbCounter" />
+
+    <Button
+        android:id="@+id/btn_showWaypointList"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Show Waypoint List"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_newWayPoint" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

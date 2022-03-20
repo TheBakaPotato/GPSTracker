@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tv_lat, tv_lon, tv_altitude, tv_accuracy, tv_speed, tv_sensor, tv_updates, tv_address, tv_waypointCounts;
     Switch sw_locationsupdates, sw_gps;
     FusedLocationProviderClient fusedLocationProviderClient;
-    Button btn_newWayPoint, btn_showWayPointList;
+    Button btn_newWayPoint, btn_showWayPointList, btn_showMap;
     boolean updateOn = false;
     LocationRequest locationRequest;
     LocationCallback locationCallBack;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         sw_gps = findViewById(R.id.sw_gps);
         btn_newWayPoint = findViewById(R.id.btn_newWayPoint);
         btn_showWayPointList = findViewById(R.id.btn_showWaypointList);
+        btn_showMap = findViewById(R.id.btn_showMap);
 
         locationRequest = new LocationRequest();
 
@@ -73,6 +75,15 @@ public class MainActivity extends AppCompatActivity {
                 updateUIValues(location);
             }
         };
+
+        btn_showMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                startActivity(intent);
+            }
+        });
+
         btn_newWayPoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
         btn_showWayPointList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ShowSavedLocationsList.class);
+                startActivity(intent);
 
             }
         });
